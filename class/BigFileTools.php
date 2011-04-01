@@ -52,6 +52,11 @@ class BigFileTools extends Object {
 		}
 	}
 
+	/**
+	 * Create BigFileTools from $path
+	 * @param string $path
+	 * @return BigFileTools
+	 */
 	static function fromPath($path) {
 		return new self($path);
 	}
@@ -290,4 +295,4 @@ class BigFileTools extends Object {
 	// </editor-fold>
 }
 
-File::init();
+BigFileTools::init();
