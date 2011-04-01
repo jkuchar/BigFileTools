@@ -5,6 +5,7 @@
  *
  * @author Honza Kuchar
  * @license LGPL
+ * @encoding utf8
  * @copyright Copyright (c) 20011, Jan Kuchař
  */
 class BigFileTools extends Object {
@@ -36,7 +37,7 @@ class BigFileTools extends Object {
 	 * Turn fastMode to false (default to true)
 	 * @var bool
 	 */
-	public static $fastMode = false;
+	public static $fastMode = true;
 
 	/**
 	 * Ininialization of class
