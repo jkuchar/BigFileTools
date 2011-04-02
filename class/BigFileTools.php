@@ -180,9 +180,15 @@ class BigFileTools extends Object {
 		}
 		$res = fseek($fp, 0, SEEK_END);
 		if ($res === 0) {
-			$pos = (string) ftell($fp);
+			$pos = ftell($fp);
 			fclose($fp);
-			return $pos;
+			// $pos will be positive int if file is <2GB
+			// if is >2GB <4GB it will be negative number
+			if($pos>=0) {
+				return (string)$pos;
+			}else{
+				return sprintf("%u", $pos);
+			}
 		} else {
 			fclose($fp);
 			return false;
