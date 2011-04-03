@@ -175,12 +175,14 @@ class BigFileTools extends Object {
 	protected function sizeNativeSeek() {
 		// This should work for large files on 64bit platforms and for small files every where
 		$fp = fopen($this->path, "rb");
+		flock($fp, LOCK_SH);
 		if (!$fp) {
 			return false;
 		}
 		$res = fseek($fp, 0, SEEK_END);
 		if ($res === 0) {
 			$pos = ftell($fp);
+			flock($fp, LOCK_UN);
 			fclose($fp);
 			// $pos will be positive int if file is <2GB
 			// if is >2GB <4GB it will be negative number
@@ -190,6 +192,7 @@ class BigFileTools extends Object {
 				return sprintf("%u", $pos);
 			}
 		} else {
+			flock($fp, LOCK_UN);
 			fclose($fp);
 			return false;
 		}
@@ -202,6 +205,7 @@ class BigFileTools extends Object {
 	 */
 	function sizeNativeRead() {
 		$fp = fopen($this->path, "rb");
+		flock($fp, LOCK_SH);
 		if (!$fp) {
 			return false;
 		}
@@ -211,6 +215,7 @@ class BigFileTools extends Object {
 
 		$size = (string) $offset;
 		if (fseek($fp, $offset) !== 0) {
+			flock($fp, LOCK_UN);
 			fclose($fp);
 			return false;
 		}
@@ -228,6 +233,7 @@ class BigFileTools extends Object {
 		if (self::$mathLib == self::MATH_GMP) {
 			gmp_strval($size);
 		}
+		flock($fp, LOCK_UN);
 		fclose($fp);
 		return $size;
 	}
