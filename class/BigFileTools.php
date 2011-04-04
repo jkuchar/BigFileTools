@@ -63,6 +63,65 @@ class BigFileTools extends Object {
 	}
 
 	/**
+	 * Getts basename of file (example: for file.txt will return "file")
+	 * @return string
+	 */
+	public function getBaseName() {
+		return pathinfo($this->path, PATHINFO_BASENAME);
+	}
+
+	/**
+	 * Getts extension of file (example: for file.txt will return "txt")
+	 * @return string
+	 */
+	public function getExtension() {
+		return pathinfo($this->path, PATHINFO_EXTENSION);
+	}
+
+
+	/**
+	 * Getts extension of file (example: for file.txt will return "file.txt")
+	 * @return string
+	 */
+	public function getFilename() {
+		return pathinfo($this->path, PATHINFO_FILENAME);
+	}
+
+	/**
+	 * Getts path to file of file (example: for file.txt will return path to file.txt, eg. /home/test/)
+	 * ! This will call absolutize path!
+	 * @return string
+	 */
+	public function getDirname() {
+		$this->absolutizePath();
+		return pathinfo($this->path, PATHINFO_DIRNAME);
+	}
+
+	/**
+	 * Getts extension of file (example: for file.txt will return "txt")
+	 * @return string
+	 */
+	public function getExtension() {
+		return pathinfo($this->path, PATHINFO_EXTENSION);
+	}
+
+	/**
+	 * Getts md5 checksum of file content
+	 * @return string
+	 */
+	public function getMd5() {
+		return md5_file($this->path);
+	}
+
+	/**
+	 * Getts sha1 checksum of file content
+	 * @return string
+	 */
+	public function getSha1() {
+		return sha1_file($this->path);
+	}
+
+	/**
 	 * Constructor - do not call directelly
 	 * @param string $path
 	 */
