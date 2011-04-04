@@ -268,25 +268,23 @@ class BigFileTools extends Object {
 	 */
 	protected function sizeExec() {
 		// filesize using exec
-		// If the platform is Windows...
 		if (function_exists("exec")) {
 			$escapedPath = escapeshellarg($this->path);
-			if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
+			
+			if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') { // Windows
 				// Try using the NT substition modifier %~z
 				$size = trim(exec("for %F in ($escapedPath) do @echo %~zF"));
-				// If the return is blank, zero, or not a number
-				if ($size AND ctype_digit($size)) {
-					return (string) $size;
-				}
-
-				// Otherwise, return the result of the 'for' command
+			}else{ // other OS
+				// If the platform is not Windows, use the stat command (should work for *nix and MacOS)
+				$size = trim(exec("stat -c%s $escapedPath"));
 			}
-
-			// If the platform is not Windows, use the stat command (should work for *nix and MacOS)
-			return (string) trim(exec("stat -c%s $escapedPath"));
-		} else {
-			return false;
+			
+			// If the return is not blank, not zero, and is number
+			if ($size AND ctype_digit($size)) {
+				return (string) $size;
+			}
 		}
+		return false;
 	}
 
 	/**
