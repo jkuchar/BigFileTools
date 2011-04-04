@@ -98,14 +98,6 @@ class BigFileTools extends Object {
 	}
 
 	/**
-	 * Getts extension of file (example: for file.txt will return "txt")
-	 * @return string
-	 */
-	public function getExtension() {
-		return pathinfo($this->path, PATHINFO_EXTENSION);
-	}
-
-	/**
 	 * Getts md5 checksum of file content
 	 * @return string
 	 */
