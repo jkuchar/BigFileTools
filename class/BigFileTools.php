@@ -7,6 +7,7 @@
  * @license LGPL
  * @encoding utf8
  * @copyright Copyright (c) 20011, Jan Kuchař
+ * @editor NetBeans
  */
 class BigFileTools extends Object {
 
@@ -176,19 +177,21 @@ class BigFileTools extends Object {
 
 	/**
 	 * Size of file
-	 * @return string | float 
+	 *
+	 * Profilling results:
+	 *  sizeCurl        0.00045299530029297
+	 *  sizeNativeSeek  0.00052094459533691
+	 *  sizeCom         0.0031449794769287
+	 *  sizeExec        0.042937040328979
+	 *  sizeNativeRead  2.7670161724091
+	 * 
+	 * @return string | float
 	 * @throws InvalidStateException
 	 */
 	public function size($float = false) {
 		if ($float == true) {
 			return (float) $this->size(false);
 		}
-
-		$return = $this->sizeNativeSeek();
-		if ($return) {
-			return $return;
-		}
-
 		$this->absolutizePath();
 
 		$return = $this->sizeCurl();
@@ -196,12 +199,17 @@ class BigFileTools extends Object {
 			return $return;
 		}
 
-		$return = $this->sizeExec();
+		$return = $this->sizeNativeSeek();
+		if ($return) {
+			return $return;
+		}
+		
+		$return = $this->sizeCom();
 		if ($return) {
 			return $return;
 		}
 
-		$return = $this->sizeCom();
+		$return = $this->sizeExec();
 		if ($return) {
 			return $return;
 		}
@@ -215,6 +223,44 @@ class BigFileTools extends Object {
 
 		throw new InvalidStateException("Can not size of file $this->path!");
 	}
+
+	// <editor-fold defaultstate="collapsed" desc="Profiling instructions">
+
+	/*
+	 * Usage:
+	 *
+	 * <?php
+	 * define("APP_DIR",dirname(__FILE__));
+	 * require_once "../load.php"; // Loads nette
+	 *
+	 * $path = "E:\\Videa\\BigFile.avi";
+	 *
+	 * $tools = BigFileTools::fromPath($path);
+	 * echo $tools->profileSize();
+	 *
+	 *
+	 *
+	function profileSize() {
+		$this->absolutizePath();
+		$this->profileFn("sizeNativeSeek");
+		$this->profileFn("sizeNativeRead");
+		$this->profileFn("sizeCurl");
+		$this->profileFn("sizeExec");
+		$this->profileFn("sizeCom");
+	}
+
+	function profileFn($name, $params=array()) {
+		Debug::timer($name);
+		$return = call_user_func_array(array($this,$name), $params);
+		if($return) {
+			echo "Funkce ".$name." vrátila ".$return."\n";
+		}  else {
+			echo 'Funkce '.$name." selhala."."\n";
+		}
+		echo "Funkce ".$name." trvala ".Debug::timer($name)."s."."\n";
+	}
+	 */
+	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="size* implementations">
 	/**
@@ -254,7 +300,7 @@ class BigFileTools extends Object {
 	 * @see http://stackoverflow.com/questions/5501451/php-x86-how-to-get-filesize-of-2gb-file-without-external-program/5504829#5504829
 	 * @return string | bool (false when fail)
 	 */
-	function sizeNativeRead() {
+	protected function sizeNativeRead() {
 		$fp = fopen($this->path, "rb");
 		flock($fp, LOCK_SH);
 		if (!$fp) {
