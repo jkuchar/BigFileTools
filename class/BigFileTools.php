@@ -3,10 +3,10 @@
 /**
  * Class for manipulating files bigger than 2GB in PHP
  *
- * @author Honza Kuchar
+ * @author Honza Kuchař
  * @license LGPL
- * @encoding utf8
- * @copyright Copyright (c) 20011, Jan Kuchař
+ * @encoding UTF-8
+ * @copyright Copyright (c) 2011, Jan Kuchař
  * @editor NetBeans
  */
 class BigFileTools extends Object {
@@ -18,31 +18,31 @@ class BigFileTools extends Object {
 	protected $path;
 
 	/**
-	 * Use in BigFileTools::$mathLib when you want to use BCMath for mathematical operations
+	 * Use in BigFileTools::$mathLib if you want to use BCMath for mathematical operations
 	 */
 	const MATH_BCMATH = "BCMath";
 
 	/**
-	 * Use in BigFileTools::$mathLib when you want to use GMP for mathematical operations
+	 * Use in BigFileTools::$mathLib if you want to use GMP for mathematical operations
 	 */
 	const MATH_GMP = "GMP";
 
 	/**
-	 * Wich mathematical library use for mathematical operations
+	 * Which mathematical library use for mathematical operations
 	 * @var string (on of constants BigFileTools::MATH_*)
 	 */
 	public static $mathLib;
 	/**
 	 * If none of fast mode is available to compute filesize, BigFileTools use to compute size slow
-	 * method of reading all file contents. If you want to enable this behaviour,
+	 * method of reading all file contents. If you want to enable this behavior,
 	 * Turn fastMode to false (default to true)
 	 * @var bool
 	 */
 	public static $fastMode = true;
 
 	/**
-	 * Ininialization of class
-	 * Do not call directely.
+	 * Initialization of class
+	 * Do not call directly.
 	 */
 	static function init() {
 		if (function_exists("bcadd")) {
@@ -50,7 +50,7 @@ class BigFileTools extends Object {
 		} elseif (function_exists("gmp_add")) {
 			self::$mathLib = self::MATH_GMP;
 		} else {
-			throw new InvalidStateException("You must have installed one of there mathemtical libraries: BC Math or GMP!");
+			throw new InvalidStateException("You must have installed one of there mathematical libraries: BC Math or GMP!");
 		}
 	}
 
@@ -64,7 +64,7 @@ class BigFileTools extends Object {
 	}
 
 	/**
-	 * Getts basename of file (example: for file.txt will return "file")
+	 * Gets basename of file (example: for file.txt will return "file")
 	 * @return string
 	 */
 	public function getBaseName() {
@@ -72,7 +72,7 @@ class BigFileTools extends Object {
 	}
 
 	/**
-	 * Getts extension of file (example: for file.txt will return "txt")
+	 * Gets extension of file (example: for file.txt will return "txt")
 	 * @return string
 	 */
 	public function getExtension() {
@@ -81,7 +81,7 @@ class BigFileTools extends Object {
 
 
 	/**
-	 * Getts extension of file (example: for file.txt will return "file.txt")
+	 * Gets extension of file (example: for file.txt will return "file.txt")
 	 * @return string
 	 */
 	public function getFilename() {
@@ -89,8 +89,8 @@ class BigFileTools extends Object {
 	}
 
 	/**
-	 * Getts path to file of file (example: for file.txt will return path to file.txt, eg. /home/test/)
-	 * ! This will call absolutize path!
+	 * Gets path to file of file (example: for file.txt will return path to file.txt, e.g. /home/test/)
+	 * ! This will call absolute path!
 	 * @return string
 	 */
 	public function getDirname() {
@@ -99,7 +99,7 @@ class BigFileTools extends Object {
 	}
 
 	/**
-	 * Getts md5 checksum of file content
+	 * Gets md5 checksum of file content
 	 * @return string
 	 */
 	public function getMd5() {
@@ -107,7 +107,7 @@ class BigFileTools extends Object {
 	}
 
 	/**
-	 * Getts sha1 checksum of file content
+	 * Gets sha1 checksum of file content
 	 * @return string
 	 */
 	public function getSha1() {
@@ -115,7 +115,7 @@ class BigFileTools extends Object {
 	}
 
 	/**
-	 * Constructor - do not call directelly
+	 * Constructor - do not call directly
 	 * @param string $path
 	 */
 	function __construct($path) {
@@ -126,7 +126,7 @@ class BigFileTools extends Object {
 	}
 
 	/**
-	 * Getts current filepath
+	 * Gets current filepath
 	 * @return string
 	 */
 	function getPath($absolutize = false) {
@@ -184,7 +184,7 @@ class BigFileTools extends Object {
 	 *  sizeCom         0.0031449794769287
 	 *  sizeExec        0.042937040328979
 	 *  sizeNativeRead  2.7670161724091
-	 * 
+	 *
 	 * @return string | float
 	 * @throws InvalidStateException
 	 */
@@ -203,7 +203,7 @@ class BigFileTools extends Object {
 		if ($return) {
 			return $return;
 		}
-		
+
 		$return = $this->sizeCom();
 		if ($return) {
 			return $return;
@@ -324,7 +324,7 @@ class BigFileTools extends Object {
 			} elseif (self::$mathLib == self::MATH_GMP) {
 				$size = gmp_add($size, $readed);
 			} else {
-				throw new InvalidStateException("No mathematical library availabled");
+				throw new InvalidStateException("No mathematical library available");
 			}
 		}
 		if (self::$mathLib == self::MATH_GMP) {
@@ -336,7 +336,7 @@ class BigFileTools extends Object {
 	}
 
 	/**
-	 * Returns file size by using curl module
+	 * Returns file size using curl module
 	 * @see http://www.php.net/manual/en/function.filesize.php#100434
 	 * @return string | bool (false when fail or cUrl module not available)
 	 */
@@ -367,7 +367,7 @@ class BigFileTools extends Object {
 		// filesize using exec
 		if (function_exists("exec")) {
 			$escapedPath = escapeshellarg($this->path);
-			
+
 			if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') { // Windows
 				// Try using the NT substition modifier %~z
 				$size = trim(exec("for %F in ($escapedPath) do @echo %~zF"));
@@ -375,7 +375,7 @@ class BigFileTools extends Object {
 				// If the platform is not Windows, use the stat command (should work for *nix and MacOS)
 				$size = trim(exec("stat -c%s $escapedPath"));
 			}
-			
+
 			// If the return is not blank, not zero, and is number
 			if ($size AND ctype_digit($size)) {
 				return (string) $size;
