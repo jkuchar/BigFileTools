@@ -178,7 +178,7 @@ class BigFileTools extends Object {
 	/**
 	 * Size of file
 	 *
-	 * Profilling results:
+	 * Profiling results:
 	 *  sizeCurl        0.00045299530029297
 	 *  sizeNativeSeek  0.00052094459533691
 	 *  sizeCom         0.0031449794769287
