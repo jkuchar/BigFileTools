@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class for manipulating files bigger than 2GB in PHP
+ * Class for manipulating files bigger than 2GB
  *
  * @author Honza Kuchař
  * @license LGPL
@@ -32,10 +32,11 @@ class BigFileTools extends Object {
 	 * @var string (on of constants BigFileTools::MATH_*)
 	 */
 	public static $mathLib;
+	
 	/**
-	 * If none of fast mode is available to compute filesize, BigFileTools use to compute size slow
-	 * method of reading all file contents. If you want to enable this behavior,
-	 * Turn fastMode to false (default to true)
+	 * If none of fast modes is available to compute filesize, BigFileTools uses to compute size very slow
+	 * method - reading file from 0 byte to end. If you want to enable this behavior,
+	 * switch fastMode to false (default is true)
 	 * @var bool
 	 */
 	public static $fastMode = true;
@@ -223,44 +224,6 @@ class BigFileTools extends Object {
 
 		throw new InvalidStateException("Can not size of file $this->path!");
 	}
-
-	// <editor-fold defaultstate="collapsed" desc="Profiling instructions">
-
-	/*
-	 * Usage:
-	 *
-	 * <?php
-	 * define("APP_DIR",dirname(__FILE__));
-	 * require_once "../load.php"; // Loads nette
-	 *
-	 * $path = "E:\\Videa\\BigFile.avi";
-	 *
-	 * $tools = BigFileTools::fromPath($path);
-	 * echo $tools->profileSize();
-	 *
-	 *
-	 *
-	function profileSize() {
-		$this->absolutizePath();
-		$this->profileFn("sizeNativeSeek");
-		$this->profileFn("sizeNativeRead");
-		$this->profileFn("sizeCurl");
-		$this->profileFn("sizeExec");
-		$this->profileFn("sizeCom");
-	}
-
-	function profileFn($name, $params=array()) {
-		Debug::timer($name);
-		$return = call_user_func_array(array($this,$name), $params);
-		if($return) {
-			echo "Funkce ".$name." vrátila ".$return."\n";
-		}  else {
-			echo 'Funkce '.$name." selhala."."\n";
-		}
-		echo "Funkce ".$name." trvala ".Debug::timer($name)."s."."\n";
-	}
-	 */
-	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="size* implementations">
 	/**
