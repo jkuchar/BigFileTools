@@ -9,7 +9,7 @@
  * @copyright Copyright (c) 2011, Jan Kuchař
  * @editor NetBeans
  */
-class BigFileTools extends Object {
+class BigFileTools extends Nette\Object {
 
 	/**
 	 * File path
@@ -51,7 +51,7 @@ class BigFileTools extends Object {
 		} elseif (function_exists("gmp_add")) {
 			self::$mathLib = self::MATH_GMP;
 		} else {
-			throw new InvalidStateException("You must have installed one of there mathematical libraries: BC Math or GMP!");
+			throw new \Nette\InvalidStateException("You must have installed one of there mathematical libraries: BC Math or GMP!");
 		}
 	}
 
@@ -287,7 +287,7 @@ class BigFileTools extends Object {
 			} elseif (self::$mathLib == self::MATH_GMP) {
 				$size = gmp_add($size, $readed);
 			} else {
-				throw new InvalidStateException("No mathematical library available");
+				throw new \Nette\InvalidStateException("No mathematical library available");
 			}
 		}
 		if (self::$mathLib == self::MATH_GMP) {
