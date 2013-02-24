@@ -189,9 +189,9 @@ class BigFileTools extends Nette\Object {
 	 * @return string | float
 	 * @throws InvalidStateException
 	 */
-	public function size($float = false) {
+	public function getSize($float = false) {
 		if ($float == true) {
-			return (float) $this->size(false);
+			return (float) $this->getSize(false);
 		}
 		$this->absolutizePath();
 
