@@ -1,5 +1,9 @@
 <?php
 
+// If you want to use this class without Nette just remove Nette\Object (it is not really required)
+// and change to \Nette\InvalidStateException to some other exception.
+
+
 /**
  * Class for manipulating files bigger than 2GB
  *
