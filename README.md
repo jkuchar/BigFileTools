@@ -22,3 +22,8 @@ There are server ways how to obtain proper file size for big files. (ordered by 
 	sizeNativeRead  2.7670161724091
 
 Function getSize tries to get size using these method as in order above.
+
+Requirements
+------------
+
+This class is designed to use with Nette. However it is really simple to remove this dependency. If you want to do that read BigFileTools.php comment on top of the file.
