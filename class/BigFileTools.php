@@ -340,7 +340,7 @@ class BigFileTools extends Nette\Object {
 				$size = trim(exec("for %F in ($escapedPath) do @echo %~zF"));
 			}else{ // other OS
 				// If the platform is not Windows, use the stat command (should work for *nix and MacOS)
-				$size = trim(exec("stat -c%s $escapedPath"));
+				$size = trim(exec("stat -Lc%s $escapedPath"));
 			}
 
 			// If the return is not blank, not zero, and is number
