@@ -10,8 +10,7 @@
  * @author Honza Kuchař
  * @license LGPL
  * @encoding UTF-8
- * @copyright Copyright (c) 2011, Jan Kuchař
- * @editor NetBeans
+ * @copyright Copyright (c) 2013, Jan Kuchař
  */
 class BigFileTools extends Nette\Object {
 
@@ -55,7 +54,7 @@ class BigFileTools extends Nette\Object {
 		} elseif (function_exists("gmp_add")) {
 			self::$mathLib = self::MATH_GMP;
 		} else {
-			throw new \Nette\InvalidStateException("You must have installed one of there mathematical libraries: BC Math or GMP!");
+			throw new BigFileToolsException("You have to install BCMath or GMP. There mathematical libraries are used for size computation.");
 		}
 	}
 
@@ -125,7 +124,7 @@ class BigFileTools extends Nette\Object {
 	 */
 	function __construct($path) {
 		if (!file_exists($path) OR !is_file($path)) {
-			throw new Exception("File not found at $path");
+			throw new BigFileToolsException("File not found at $path");
 		}
 		$this->path = $path;
 	}
@@ -145,7 +144,11 @@ class BigFileTools extends Nette\Object {
 	 * Converts relative path to absolute
 	 */
 	function absolutizePath() {
-		return $this->path = realpath($this->path);
+		$path = realpath($this->path);
+		if(!$path) {
+			throw new BigFileToolsException("Not possible to resolve absolute path.");
+		}
+		return $this->path = $path;
 	}
 
 	/**
@@ -191,7 +194,7 @@ class BigFileTools extends Nette\Object {
 	 *  sizeNativeRead  2.7670161724091
 	 *
 	 * @return string | float
-	 * @throws InvalidStateException
+	 * @throws BigFileToolsException
 	 */
 	public function getSize($float = false) {
 		if ($float == true) {
@@ -226,7 +229,7 @@ class BigFileTools extends Nette\Object {
 			}
 		}
 
-		throw new InvalidStateException("Can not size of file $this->path!");
+		throw new BigFileToolsException("Can not size of file $this->path!");
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="size* implementations">
@@ -291,7 +294,7 @@ class BigFileTools extends Nette\Object {
 			} elseif (self::$mathLib == self::MATH_GMP) {
 				$size = gmp_add($size, $read);
 			} else {
-				throw new \Nette\InvalidStateException("No mathematical library available");
+				throw new BigFileToolsException("No mathematical library available");
 			}
 		}
 		if (self::$mathLib == self::MATH_GMP) {
@@ -371,3 +374,5 @@ class BigFileTools extends Nette\Object {
 }
 
 BigFileTools::init();
+
+class BigFileToolsException extends Exception{}
