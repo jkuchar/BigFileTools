@@ -239,10 +239,10 @@ class BigFileTools extends Nette\Object {
 	protected function sizeNativeSeek() {
 		// This should work for large files on 64bit platforms and for small files every where
 		$fp = fopen($this->path, "rb");
-		flock($fp, LOCK_SH);
 		if (!$fp) {
 			return false;
 		}
+		flock($fp, LOCK_SH);
 		$res = fseek($fp, 0, SEEK_END);
 		if ($res === 0) {
 			$pos = ftell($fp);
@@ -252,7 +252,7 @@ class BigFileTools extends Nette\Object {
 			// if is >2GB <4GB it will be negative number
 			if($pos>=0) {
 				return (string)$pos;
-			}else{
+			} else {
 				return sprintf("%u", $pos);
 			}
 		} else {
@@ -269,10 +269,10 @@ class BigFileTools extends Nette\Object {
 	 */
 	protected function sizeNativeRead() {
 		$fp = fopen($this->path, "rb");
-		flock($fp, LOCK_SH);
 		if (!$fp) {
 			return false;
 		}
+		flock($fp, LOCK_SH);
 
 		rewind($fp);
 		$offset = PHP_INT_MAX - 1;
@@ -285,17 +285,17 @@ class BigFileTools extends Nette\Object {
 		}
 		$chunksize = 1024 * 1024;
 		while (!feof($fp)) {
-			$readed = strlen(fread($fp, $chunksize));
+			$read = strlen(fread($fp, $chunksize));
 			if (self::$mathLib == self::MATH_BCMATH) {
-				$size = bcadd($size, $readed);
+				$size = bcadd($size, $read);
 			} elseif (self::$mathLib == self::MATH_GMP) {
-				$size = gmp_add($size, $readed);
+				$size = gmp_add($size, $read);
 			} else {
 				throw new \Nette\InvalidStateException("No mathematical library available");
 			}
 		}
 		if (self::$mathLib == self::MATH_GMP) {
-			gmp_strval($size);
+			$size = gmp_strval($size);
 		}
 		flock($fp, LOCK_UN);
 		fclose($fp);
