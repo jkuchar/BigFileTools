@@ -4,7 +4,7 @@
  * Class for manipulating files bigger than 2GB
  *
  * @author Honza Kuchař
- * @license LGPL
+ * @license New BSD
  * @encoding UTF-8
  * @copyright Copyright (c) 2013, Jan Kuchař
  */
