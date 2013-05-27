@@ -1,0 +1,17 @@
+{
+	"name": "jkuchar/bigfiletools",
+	"description": "Tools that allows you to manipulate files over 2GB in PHP.",
+	"license": "New BSD",
+	"authors": [
+		{
+			"name": "Jan Kuchař",
+			"homepage": "http://www.jankuchar.cz"
+		}
+	],
+	"autoload": {
+		"classmap": ["/class"]
+	},
+	"require": {
+		"php": ">= 5.2.0"
+	}
+}
