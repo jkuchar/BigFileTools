@@ -308,7 +308,6 @@ class BigFileTools {
 	 * @return string | bool (false when fail or cUrl module not available)
 	 */
 	protected function sizeCurl() {
-		// If program goes here, file must be larger than 2GB
 		// curl solution - cross platform and really cool :)
 		if (function_exists("curl_init")) {
 			$ch = curl_init("file://" . realpath($this->path));
