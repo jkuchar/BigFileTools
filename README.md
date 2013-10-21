@@ -1,7 +1,9 @@
 BigFileTools
 ============
 
-This project is response for stackoverflow question. http://stackoverflow.com/questions/5501451/php-x86-how-to-get-filesize-of-2gb-file-without-external-program
+Project that allows you to manipulate huge files in PHP. (currently supports only getting file size)
+
+This project was (originally) response for stackoverflow question. http://stackoverflow.com/questions/5501451/php-x86-how-to-get-filesize-of-2gb-file-without-external-program
 
 Example:
 
@@ -11,9 +13,11 @@ Example:
 	$f = BigFileTools::fromFile("favoriteFilm.mkv");
 	echo $f->getSize()." bytes\n";
 	
-This project uses BCMath or GMP for calculating big numbers. (automatically choosen) So getSize returns string for maximal precision.
+	?>
+	
+This project uses BCMath or GMP for calculating big numbers. (automatically chosen) So getSize returns string for maximal precision.
 
-There are server ways how to obtain proper file size for big files. (ordered by time)
+There are several ways how to get proper file size for big files in PHP. (ordered by runtime)
 
 	method          time
 	------          ----
@@ -23,7 +27,7 @@ There are server ways how to obtain proper file size for big files. (ordered by 
 	sizeExec        0.042937040328979
 	sizeNativeRead  2.7670161724091
 
-getSize() tries to get size using these method as in order above.
+getSize() tries to get size using these method as in order above to be as fast as possible on your platform.
 
 Requirements
 ------------
