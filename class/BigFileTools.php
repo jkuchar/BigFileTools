@@ -2,6 +2,7 @@
 
 /**
  * Class for manipulating files bigger than 2GB
+ * (currently supports only getting filesize)
  *
  * @author Honza Kuchař
  * @license New BSD
