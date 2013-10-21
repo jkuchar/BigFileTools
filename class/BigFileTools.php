@@ -119,7 +119,7 @@ class BigFileTools {
 	 * @param string $path
 	 */
 	function __construct($path, $absolutizePath = true) {
-		if (!file_exists($path) OR !is_file($path)) {
+		if (!static::isReadableFile($path)) {
 			throw new BigFileToolsException("File not found at $path");
 		}
 		
@@ -135,6 +135,7 @@ class BigFileTools {
 	 * @param string $path
 	 */
 	function setPath($path) {
+		
 		$this->setAbsolutePath(static::absolutizePath($path));
 	}
 	
@@ -162,11 +163,28 @@ class BigFileTools {
 	 * Converts relative path to absolute
 	 */
 	static function absolutizePath($path) {
+		
 		$path = realpath($path);
 		if(!$path) {
+			// TODO: use hack like http://stackoverflow.com/questions/4049856/replace-phps-realpath or http://www.php.net/manual/en/function.realpath.php#84012
+			//       probaly as optinal feature that can be turned on when you know, what are you doing
+			
 			throw new BigFileToolsException("Not possible to resolve absolute path.");
 		}
 		return $path;
+	}
+	
+	static function isReadableFile($file) {
+		// Do not use is_file
+		// @link https://bugs.php.net/bug.php?id=27792
+		// $readable = is_readable($file); // does not always return correct value for directories
+		
+		$fp = @fopen($file, "r"); // must be file and must be readable
+		if($fp) {
+			fclose($fp);
+			return true;
+		}
+		return false;
 	}
 
 	/**
