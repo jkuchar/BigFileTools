@@ -12,7 +12,7 @@
 class BigFileTools {
 
 	/**
-	 * File path
+	 * Absolute file path
 	 * @var string
 	 */
 	protected $path;
@@ -95,7 +95,6 @@ class BigFileTools {
 	 * @return string
 	 */
 	public function getDirname() {
-		$this->absolutizePath();
 		return pathinfo($this->path, PATHINFO_DIRNAME);
 	}
 
@@ -119,52 +118,74 @@ class BigFileTools {
 	 * Constructor - do not call directly
 	 * @param string $path
 	 */
-	function __construct($path) {
+	function __construct($path, $absolutizePath = true) {
 		if (!file_exists($path) OR !is_file($path)) {
 			throw new BigFileToolsException("File not found at $path");
 		}
-		$this->path = $path;
+		
+		if($absolutizePath) {
+			$this->setPath($path);
+		}else{
+			$this->setAbsolutePath($path);
+		}
 	}
 
+	/**
+	 * Tries to absolutize path and than updates instance state
+	 * @param string $path
+	 */
+	function setPath($path) {
+		$this->setAbsolutePath(static::absolutizePath($path));
+	}
+	
+	/**
+	 * Setts absolute path
+	 * @param string $path
+	 */
+	function setAbsolutePath($path) {
+		$this->path = $path;
+	}
+	
 	/**
 	 * Gets current filepath
 	 * @return string
 	 */
-	function getPath($absolutize = false) {
-		if ($absolutize) {
-			$this->absolutizePath();
+	function getPath($a = "") {
+		if(a != "") {
+			trigger_error("getPath with absolutizing argument is deprecated!", E_USER_DEPRECATED);
 		}
+		
 		return $this->path;
 	}
-
+	
 	/**
 	 * Converts relative path to absolute
 	 */
-	function absolutizePath() {
-		$path = realpath($this->path);
+	static function absolutizePath($path) {
+		$path = realpath($path);
 		if(!$path) {
 			throw new BigFileToolsException("Not possible to resolve absolute path.");
 		}
-		return $this->path = $path;
+		return $path;
 	}
 
 	/**
-	 * Moves file to new location
+	 * Moves file to new location / rename
 	 * @param string $dest
 	 */
 	function move($dest) {
 		if (move_uploaded_file($this->path, $dest)) {
-			$this->path = $dest;
+			$this->setPath($dest);
 			return TRUE;
 		} else {
 			@unlink($dest); // needed in PHP < 5.3 & Windows; intentionally @
 			if (rename($this->path, $dest)) {
-				$this->path = $dest;
+				$this->setPath($dest);
 				return TRUE;
 			} else {
 				if (copy($this->path, $dest)) {
-					unlink($this->path);
-					$this->path = $dest;
+					unlink($this->path); // delete file
+					$this->setPath($dest);
 					return TRUE;
 				}
 				return FALSE;
@@ -177,7 +198,8 @@ class BigFileTools {
 	 * @param string $dest
 	 */
 	function relocate($dest) {
-		$this->path = $dest;
+		trigger_error("Relocate is deprecated!", E_USER_DEPRECATED);
+		$this->setPath($dest);
 	}
 
 	/**
@@ -197,7 +219,6 @@ class BigFileTools {
 		if ($float == true) {
 			return (float) $this->getSize(false);
 		}
-		$this->absolutizePath();
 
 		$return = $this->sizeCurl();
 		if ($return) {
@@ -310,7 +331,7 @@ class BigFileTools {
 	protected function sizeCurl() {
 		// curl solution - cross platform and really cool :)
 		if (function_exists("curl_init")) {
-			$ch = curl_init("file://" . realpath($this->path));
+			$ch = curl_init("file://" . $this->path);
 			curl_setopt($ch, CURLOPT_NOBODY, true);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_HEADER, true);
