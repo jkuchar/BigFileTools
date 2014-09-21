@@ -1,5 +1,6 @@
 BigFileTools
 ============
+[![Code Climate](https://codeclimate.com/github/jkuchar/BigFileTools/badges/gpa.svg)](https://codeclimate.com/github/jkuchar/BigFileTools)
 
 Project that allows you to manipulate huge files in PHP. (currently supports only getting file size)
 
