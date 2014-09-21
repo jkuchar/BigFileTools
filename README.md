@@ -1,4 +1,5 @@
 # BigFileTools #
+[![Code Climate](https://codeclimate.com/github/jkuchar/BigFileTools/badges/gpa.svg)](https://codeclimate.com/github/jkuchar/BigFileTools)
 
 
 This project is collection of hacks that are needed to manipulate files over 2GB in PHP. Currently there is support for getting **exact file size**. This project is originally answer for [stackoverflow question](http://stackoverflow.com/questions/5501451/php-x86-how-to-get-filesize-of-2gb-file-without-external-program). 
