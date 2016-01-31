@@ -1,6 +1,7 @@
 <?php
 
 namespace BigFileTools;
+use Brick\Math\BigInteger;
 
 /**
  * Class for manipulating files bigger than 2GB
@@ -20,42 +21,12 @@ class BigFileTools {
 	protected $path;
 
 	/**
-	 * Use in BigFileTools::$mathLib if you want to use BCMath for mathematical operations
-	 */
-	const MATH_BCMATH = "BCMath";
-
-	/**
-	 * Use in BigFileTools::$mathLib if you want to use GMP for mathematical operations
-	 */
-	const MATH_GMP = "GMP";
-
-	/**
-	 * Which mathematical library use for mathematical operations
-	 * @var string (on of constants BigFileTools::MATH_*)
-	 */
-	public static $mathLib;
-	
-	/**
 	 * If none of fast modes is available to compute filesize, BigFileTools uses to compute size very slow
 	 * method - reading file from 0 byte to end. If you want to enable this behavior,
 	 * switch fastMode to false (default is true)
 	 * @var bool
 	 */
 	public static $fastMode = true;
-
-	/**
-	 * Initialization of class
-	 * Do not call directly.
-	 */
-	static function init() {
-		if (function_exists("bcadd")) {
-			self::$mathLib = self::MATH_BCMATH;
-		} elseif (function_exists("gmp_add")) {
-			self::$mathLib = self::MATH_GMP;
-		} else {
-			throw new Exception("You have to install BCMath or GMP. There mathematical libraries are used for size computation.");
-		}
-	}
 
 	/**
 	 * Create BigFileTools from $path
@@ -177,7 +148,12 @@ class BigFileTools {
 		}
 		return $path;
 	}
-	
+
+	/**
+	 * Returns if file exists and is readable
+	 * @param $file
+	 * @return bool
+	 */
 	static function isReadableFile($file) {
 		// Do not use is_file
 		// @link https://bugs.php.net/bug.php?id=27792
@@ -219,6 +195,7 @@ class BigFileTools {
 	/**
 	 * Changes path of this file object
 	 * @param string $dest
+	 * @deprecated Create new instance instead
 	 */
 	function relocate($dest) {
 		trigger_error("Relocate is deprecated!", E_USER_DEPRECATED);
@@ -235,13 +212,10 @@ class BigFileTools {
 	 *  sizeExec        0.042937040328979
 	 *  sizeNativeRead  2.7670161724091
 	 *
-	 * @return string | float
+	 * @return BigInteger
 	 * @throws Exception
 	 */
-	public function getSize($float = false) {
-		if ($float == true) {
-			return (float) $this->getSize(false);
-		}
+	public function getSize() {
 
 		$return = $this->sizeCurl();
 		if ($return) {
@@ -278,16 +252,19 @@ class BigFileTools {
 	 * Returns file size by using native fseek function
 	 * @see http://www.php.net/manual/en/function.filesize.php#79023
 	 * @see http://www.php.net/manual/en/function.filesize.php#102135
-	 * @return string | bool (false when fail)
+	 * @return BigInteger | null
 	 */
 	protected function sizeNativeSeek() {
-		// This should work for large files on 64bit platforms and for small files every where
+		// This should work for large files on 64bit platforms and for small files everywhere
 		$fp = fopen($this->path, "rb");
 		if (!$fp) {
-			return false;
+			// file not readable
+			// todo: throw exception?
+			return null;
 		}
 		flock($fp, LOCK_SH);
 		$res = fseek($fp, 0, SEEK_END);
+		// TODO: use incremental seek instead this can return wrong value on some platforms
 		if ($res === 0) {
 			$pos = ftell($fp);
 			flock($fp, LOCK_UN);
@@ -302,54 +279,47 @@ class BigFileTools {
 		} else {
 			flock($fp, LOCK_UN);
 			fclose($fp);
-			return false;
+			return null;
 		}
 	}
 
 	/**
 	 * Returns file size by using native fread function
 	 * @see http://stackoverflow.com/questions/5501451/php-x86-how-to-get-filesize-of-2gb-file-without-external-program/5504829#5504829
-	 * @return string | bool (false when fail)
+	 * @return BigInteger | null
+	 * @throws \BigFileTools\Exception
 	 */
 	protected function sizeNativeRead() {
 		$fp = fopen($this->path, "rb");
 		if (!$fp) {
-			return false;
+			return null;
 		}
 		flock($fp, LOCK_SH);
 
 		rewind($fp);
 		$offset = PHP_INT_MAX - 1;
 
-		$size = (string) $offset;
 		if (fseek($fp, $offset) !== 0) {
 			flock($fp, LOCK_UN);
 			fclose($fp);
-			return false;
+			return null; // ERROR
 		}
-		$chunksize = 1024 * 1024;
+
+		$fileSize = BigInteger::of($offset);
+		$chunkSize = 1024 * 1024;
 		while (!feof($fp)) {
-			$read = strlen(fread($fp, $chunksize));
-			if (self::$mathLib == self::MATH_BCMATH) {
-				$size = bcadd($size, $read);
-			} elseif (self::$mathLib == self::MATH_GMP) {
-				$size = gmp_add($size, $read);
-			} else {
-				throw new Exception("No mathematical library available");
-			}
-		}
-		if (self::$mathLib == self::MATH_GMP) {
-			$size = gmp_strval($size);
+			$readBytes = strlen(fread($fp, $chunkSize));
+			$fileSize = $fileSize->plus($readBytes);
 		}
 		flock($fp, LOCK_UN);
 		fclose($fp);
-		return $size;
+		return $fileSize;
 	}
 
 	/**
 	 * Returns file size using curl module
 	 * @see http://www.php.net/manual/en/function.filesize.php#100434
-	 * @return string | bool (false when fail or cUrl module not available)
+	 * @return BigInteger | null
 	 */
 	protected function sizeCurl() {
 		// curl solution - cross platform and really cool :)
@@ -361,17 +331,17 @@ class BigFileTools {
 			$data = curl_exec($ch);
 			curl_close($ch);
 			if ($data !== false && preg_match('/Content-Length: (\d+)/', $data, $matches)) {
-				return (string) $matches[1];
+				return BigInteger::of($matches[1]);
 			}
 		} else {
-			return false;
+			return null;
 		}
 	}
 
 	/**
 	 * Returns file size by using external program (exec needed)
 	 * @see http://stackoverflow.com/questions/5501451/php-x86-how-to-get-filesize-of-2gb-file-without-external-program/5502328#5502328
-	 * @return string | bool (false when fail or exec is disabled)
+	 * @return BigInteger | null
 	 */
 	protected function sizeExec() {
 		// filesize using exec
@@ -379,7 +349,7 @@ class BigFileTools {
 			$escapedPath = escapeshellarg($this->path);
 
 			if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') { // Windows
-				// Try using the NT substition modifier %~z
+				// Try using the NT substitution modifier %~z
 				$size = trim(exec("for %F in ($escapedPath) do @echo %~zF"));
 			}else{ // other OS
 				// If the platform is not Windows, use the stat command (should work for *nix and MacOS)
@@ -388,31 +358,30 @@ class BigFileTools {
 
 			// If the return is not blank, not zero, and is number
 			if ($size AND ctype_digit($size)) {
-				return (string) $size;
+				return BigInteger::of($size);
 			}
 		}
-		return false;
+		return null;
 	}
 
 	/**
 	 * Returns file size by using Windows COM interface
 	 * @see http://stackoverflow.com/questions/5501451/php-x86-how-to-get-filesize-of-2gb-file-without-external-program/5502328#5502328
-	 * @return string | bool (false when fail or COM not available)
+	 * @return BigInteger | null
 	 */
 	protected function sizeCom() {
 		if (class_exists("COM")) {
 			// Use the Windows COM interface
-			$fsobj = new COM('Scripting.FileSystemObject');
+			$fsobj = new \COM('Scripting.FileSystemObject');
 			if (dirname($this->path) == '.')
 				$this->path = ((substr(getcwd(), -1) == DIRECTORY_SEPARATOR) ? getcwd() . basename($this->path) : getcwd() . DIRECTORY_SEPARATOR . basename($this->path));
 			$f = $fsobj->GetFile($this->path);
-			return (string) $f->Size;
+			return BigInteger::of($f->Size);
 		}
+		return null;
 	}
 
 	// </editor-fold>
 }
-
-BigFileTools::init();
 
 class Exception extends \Exception{}
