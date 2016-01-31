@@ -1,5 +1,7 @@
 <?php
 
+namespace BigFileTools;
+
 /**
  * Class for manipulating files bigger than 2GB
  * (currently supports only getting filesize)
@@ -51,7 +53,7 @@ class BigFileTools {
 		} elseif (function_exists("gmp_add")) {
 			self::$mathLib = self::MATH_GMP;
 		} else {
-			throw new BigFileToolsException("You have to install BCMath or GMP. There mathematical libraries are used for size computation.");
+			throw new Exception("You have to install BCMath or GMP. There mathematical libraries are used for size computation.");
 		}
 	}
 
@@ -120,7 +122,7 @@ class BigFileTools {
 	 */
 	function __construct($path, $absolutizePath = true) {
 		if (!static::isReadableFile($path)) {
-			throw new BigFileToolsException("File not found at $path");
+			throw new Exception("File not found at $path");
 		}
 		
 		if($absolutizePath) {
@@ -169,7 +171,7 @@ class BigFileTools {
 			// TODO: use hack like http://stackoverflow.com/questions/4049856/replace-phps-realpath or http://www.php.net/manual/en/function.realpath.php#84012
 			//       probaly as optinal feature that can be turned on when you know, what are you doing
 			
-			throw new BigFileToolsException("Not possible to resolve absolute path.");
+			throw new Exception("Not possible to resolve absolute path.");
 		}
 		return $path;
 	}
@@ -190,6 +192,7 @@ class BigFileTools {
 	/**
 	 * Moves file to new location / rename
 	 * @param string $dest
+	 * @return bool
 	 */
 	function move($dest) {
 		if (move_uploaded_file($this->path, $dest)) {
@@ -231,7 +234,7 @@ class BigFileTools {
 	 *  sizeNativeRead  2.7670161724091
 	 *
 	 * @return string | float
-	 * @throws BigFileToolsException
+	 * @throws Exception
 	 */
 	public function getSize($float = false) {
 		if ($float == true) {
@@ -265,7 +268,7 @@ class BigFileTools {
 			}
 		}
 
-		throw new BigFileToolsException("Can not size of file $this->path!");
+		throw new Exception("Can not size of file $this->path!");
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="size* implementations">
@@ -330,7 +333,7 @@ class BigFileTools {
 			} elseif (self::$mathLib == self::MATH_GMP) {
 				$size = gmp_add($size, $read);
 			} else {
-				throw new BigFileToolsException("No mathematical library available");
+				throw new Exception("No mathematical library available");
 			}
 		}
 		if (self::$mathLib == self::MATH_GMP) {
@@ -410,4 +413,4 @@ class BigFileTools {
 
 BigFileTools::init();
 
-class BigFileToolsException extends Exception{}
+class Exception extends \Exception{}
