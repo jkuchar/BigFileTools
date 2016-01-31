@@ -119,6 +119,8 @@ class BigFileTools {
 	/**
 	 * Constructor - do not call directly
 	 * @param string $path
+	 * @param bool $absolutizePath
+	 * @throws Exception
 	 */
 	function __construct($path, $absolutizePath = true) {
 		if (!static::isReadableFile($path)) {
