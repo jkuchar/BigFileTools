@@ -2,5 +2,6 @@
 
 require '../class/BigFileTools.php';
 
-
-echo $f = BigFileTools::fromPath(__FILE__)->getSize()." bytes";
+$size = BigFileTools::fromPath(__FILE__)->getSize();
+var_dump($size);
+echo "Example files size is " . $size . " bytes\n";
