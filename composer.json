@@ -8,10 +8,18 @@
 			"homepage": "http://www.jankuchar.cz"
 		}
 	],
-	"autoload": {
-		"classmap": ["/class"]
-	},
+    "autoload": {
+        "psr-4": {
+            "BigFileTools\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "classmap": [
+			"tests/"
+		]
+    },
 	"require": {
-		"php": ">= 5.2.0"
+		"php": ">= 5.2.0",
+		"brick/math": "^0.5.2"
 	}
 }

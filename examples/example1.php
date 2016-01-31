@@ -1,7 +1,6 @@
 <?php
 
-require '../class/BigFileTools.php';
+require '../vendor/autoload.php';
 
-$size = BigFileTools::fromPath(__FILE__)->getSize();
-var_dump($size);
-echo "Example files size is " . $size . " bytes\n";
+
+echo $f = BigFileTools\BigFileTools::fromPath(__FILE__)->getSize()." bytes";
