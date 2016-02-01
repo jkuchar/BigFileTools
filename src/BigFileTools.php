@@ -7,11 +7,9 @@ use BigFileTools\Driver\CurlDriver;
 use BigFileTools\Driver\ExecDriver;
 use BigFileTools\Driver\ISizeDriver;
 use BigFileTools\Driver\NativeSeekDriver;
+use BigFileTools\Driver\BestEffortAggregateSizeDriver;
 
 /**
- * Class for manipulating files bigger than 2GB
- * (currently supports only getting filesize)
- *
  * @author Honza Kuchař
  * @license New BSD
  * @encoding UTF-8
@@ -26,7 +24,7 @@ class BigFileTools {
 	 * @deprecated
 	 */
 	static function fromPath($path) {
-		return (new self())->getFile($path);
+		return static::createDefault()->getFile($path);
 	}
 
 	/**
@@ -35,21 +33,38 @@ class BigFileTools {
 	private $sizeDriver;
 
 	/**
+	 * Create new instance of BigFileTools by providing list of drivers.
+	 * Those that cannot be initialized on given platform will be skipped.
+	 * @param string[] $drivers
+	 * @return static
+	 */
+	public static function createFrom(array $drivers) {
+		return new static(
+			new BestEffortAggregateSizeDriver($drivers)
+		);
+	}
+
+	/**
+	 * Create new instance of BigFileTools using default configuration.
+	 * This uses default drivers ordered by speed.
+	 * @return static
+	 */
+	public static function createDefault() {
+		return static::createFrom([
+			CurlDriver::class,
+			NativeSeekDriver::class,
+			ComDriver::class,
+			ExecDriver::class,
+			//NativeReadDriver::class,
+		]);
+	}
+
+	/**
 	 * Constructor - do not call directly
 	 * @param ISizeDriver $sizeDriver
 	 */
-	function __construct(ISizeDriver $sizeDriver = null)
+	function __construct(ISizeDriver $sizeDriver)
 	{
-		if(!$sizeDriver) {
-			$drivers = [
-				new CurlDriver(),
-				new NativeSeekDriver(),
-				new ComDriver(),
-				new ExecDriver(),
-				//new NativeReadDriver()
-			];
-			$sizeDriver = new AggregationSizeDriver($drivers);
-		}
 		$this->sizeDriver = $sizeDriver;
 	}
 
