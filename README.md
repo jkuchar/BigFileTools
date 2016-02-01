@@ -17,14 +17,16 @@ use BigFileTools\BigFileTools;
 
 // alternatively you can use BigFileTools::createFrom([drivers]) to provide custom drivers
 $file = BigFileTools::createDefault()->getFile(__FILE__);
-echo "Example files size is " . $file->getSize() . " bytes\n";
+echo "Example file size is " . $file->getSize() . " bytes\n";
 ````
 Will produce output:
 ````
 string(3) "176"
-Example files size is 176 bytes
+Example file size is 176 bytes
 ````
-Please note, that getSize returns `string`. This is due to fact we cannot be sure that php-integer will be able to store that big value.
+Please note, that `getSize()` returns [Brick](https://github.com/brick/math)\\[BigInteger](http://brick.io/math/class-Brick.Math.BigInteger.html). This is due to fact that PHP's internal integer can be too small. 
+
+If you need just approximate value of file size you can convert `BigInteger` into `float`. Please note that by doing this you can *loose precision*.
 
 **Tip:** If you are using DI container you are probably interested into non-static configuration. There is example prepared for this scenario. 
 
@@ -43,19 +45,26 @@ To overcome this problem this library uses string representation of numbers whic
 
 **Caution:** There are tons of non-solutions for this problem. Most of them looks like `sprintf("%u", filesize($file));`. This does NOT solve problem. If just shifts it a little. The `%u` assumes give value as **unsigned** integer. This means that first signing bit is treated also as a value. Unfortunately this means that boundary was just shifted from 2 GB limit to 4 GB. 
 
-Second problem is that standard file manipulation APIs fails with strange errors or returns completely weird values. Library therefore implements more of doing things and tries what works on your platform. They are executed from the fastest to the slowest method. On my test data results were:
+Second problem is that standard file manipulation APIs fails with strange errors or returns weird values. That is why BigFileTools has `drivers`. They are by default executed from the fastest to the slowest and unsupported ones are skipped.
 
+### Drivers ###
 
-	method          time
-	------          ----
-	sizeCurl        0.00045299530029297
-	sizeNativeSeek  0.00052094459533691
-	sizeCom         0.0031449794769287
-	sizeExec        0.042937040328979
-	sizeNativeRead  2.7670161724091
+Currently there is support for *size drivers* - drivers for obtaining file size.
 
+Selecting default drivers and their order of drivers is done based on two factors - availability and speed.
+
+| Driver           | Time (s)            | Runtime requirements | Platform 
+| ---------------  | ------------------- | --------------       | ---------
+| CurlDriver       | 0.00045299530029297 | CURL extension       | -
+| NativeSeekDriver | 0.00052094459533691 | -                    | -
+| ComDriver        | 0.0031449794769287  | COM+.NET extension   | Windows only
+| ExecDriver       | 0.042937040328979   | exec() enabled       | Windows, POSIX
+| NativeRead       | 2.7670161724091     | -                    | -
+
+In default configuration size drivers are ordered by speed and unavailable ones are skipped. This means that in default configuration you do not need to worry about compatibility.
 
 Requirements
 ------------
+Please follow [Composer](https://getcomposer.org/) requirements.
 
-If composer does not fail to install, it is safe to use on your system.
+To speed things up (e.g. in production) **I recommend installing CURL extension.**
