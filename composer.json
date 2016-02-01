@@ -24,5 +24,8 @@
 	},
 	"suggests": {
 		"ext-curl": "To speed things up. CURL is the fastest method of getting filesize."
+	},
+	"require-dev": {
+		"nette/tester": "^1.6"
 	}
 }
