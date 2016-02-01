@@ -9,6 +9,9 @@
 		}
 	],
     "autoload": {
+	    "classmap": [
+		    "src/BigFileTools-nonamespace.php"
+	    ],
         "psr-4": {
             "BigFileTools\\": "src/"
         }
