@@ -2,6 +2,7 @@
 
 namespace BigFileTools\Driver;
 
+use BigFileTools\Utils;
 use Brick\Math\BigInteger;
 
 class NativeReadDriver implements ISizeDriver

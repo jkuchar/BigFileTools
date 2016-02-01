@@ -8,6 +8,11 @@
 
 namespace BigFileTools;
 
+/**
+ * Class Utils
+ * @package BigFileTools
+ * @internal
+ */
 class Utils
 {
 	/**
@@ -15,6 +20,7 @@ class Utils
 	 * @param string $path relative path
 	 * @return string Absolute path
 	 * @throws Exception
+	 * @internal
 	 */
 	static function absolutizePath($path)
 	{
@@ -28,4 +34,18 @@ class Utils
 		}
 		return $path;
 	}
+
+	/**
+	 * Waits until get's lock
+	 * @param resource $fp valid file handle
+	 * @param int      $lockType bitmask see flock()
+	 * @return bool last flock() result
+	 * @internal
+	 */
+//	static function waitForLock($fp, $lockType) {
+//		while(($result = flock($fp, $lockType | LOCK_NB)) === false) {
+//			usleep(100000);
+//		}
+//		return $result;
+//	}
 }
