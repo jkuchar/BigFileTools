@@ -8,5 +8,5 @@ This means to cover all cases we need three files:
 - size > 2^32
 
 For more information please refer to:
-- [setup.sh](setup.sh) and [setup.cmd](setup.cmd) - creating testing fixtures (three big files)
-- [BaseDriverTest](BigFileTools/Driver/BaseDriverTest.php) - for test asserts 
+- [setup.sh](../../setup.sh) and [setup.cmd](../../setup.cmd) - creating testing fixtures (three big files)
+- [BaseDriverTest](BaseDriverTest.php) - for test asserts 
