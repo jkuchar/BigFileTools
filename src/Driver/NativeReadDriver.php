@@ -2,7 +2,6 @@
 
 namespace BigFileTools\Driver;
 
-use BigFileTools\Utils;
 use Brick\Math\BigInteger;
 
 class NativeReadDriver implements ISizeDriver
@@ -18,18 +17,10 @@ class NativeReadDriver implements ISizeDriver
 		if (!$fp) {
 			throw new Exception("Cannot read from file.");
 		}
+
 		flock($fp, LOCK_SH);
-
 		rewind($fp);
-		$offset = PHP_INT_MAX - 1;
-
-		if (fseek($fp, $offset) !== 0) {
-			flock($fp, LOCK_UN);
-			fclose($fp);
-			throw new Exception("Cannot seek in file");
-		}
-
-		$fileSize = BigInteger::of($offset);
+		$fileSize = BigInteger::zero();
 		$chunkSize = 1024 * 1024;
 		while (!feof($fp)) {
 			$readBytes = strlen(fread($fp, $chunkSize));
