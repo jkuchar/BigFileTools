@@ -1,0 +1,15 @@
+language: php
+php:
+  - '5.6'
+  - '7.0'
+  - nightly
+
+before_script:
+  - composer install --no-interaction --prefer-dist
+  - bash tests/setup.sh
+
+script:
+  - vendor/bin/tester -c tests/php-unix.ini -s tests
+
+after_script:
+  - bash tests/cleanup.sh
