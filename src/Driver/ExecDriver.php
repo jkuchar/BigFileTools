@@ -6,6 +6,7 @@ use Brick\Math\BigInteger;
 class ExecDriver implements ISizeDriver
 {
 	/**
+	 * Returns file size by using system shell/cmd commands
 	 * @inheritdoc
 	 * @link http://stackoverflow.com/questions/5501451/php-x86-how-to-get-filesize-of-2gb-file-without-external-program/5502328#5502328
 	 */
