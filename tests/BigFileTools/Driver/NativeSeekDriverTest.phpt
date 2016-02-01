@@ -11,7 +11,7 @@ $container = require __DIR__ . "/../../bootstrap.php";
 
 class NativeSeekDriverTest extends BaseDriverTest
 {
-	public function getDriver()
+	protected function getDriver()
 	{
 		return new NativeSeekDriver();
 	}
