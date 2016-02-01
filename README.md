@@ -1,4 +1,6 @@
 # BigFileTools #
+[![Build Status](https://travis-ci.org/jkuchar/BigFileTools.svg?branch=master)](https://travis-ci.org/jkuchar/BigFileTools)
+
 [![Code Climate](https://codeclimate.com/github/jkuchar/BigFileTools/badges/gpa.svg)](https://codeclimate.com/github/jkuchar/BigFileTools)
 
 

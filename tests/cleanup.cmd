@@ -1,0 +1,1 @@
+del tests\temp\*.tmp
