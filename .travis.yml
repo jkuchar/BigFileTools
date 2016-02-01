@@ -7,6 +7,7 @@ php:
 before_script:
   - composer install --no-interaction --prefer-dist
   - bash tests/setup.sh
+  - vendor/bin/tester -i
 
 script:
   - vendor/bin/tester -c tests/php-unix.ini -s tests
