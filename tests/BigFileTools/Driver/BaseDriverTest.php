@@ -7,10 +7,10 @@
 
 namespace BigFileTools\Driver;
 
-use BigFileTools\BaseTest;
 use Tester\Assert;
+use Tester\TestCase;
 
-abstract class BaseDriverTest extends BaseTest
+abstract class BaseDriverTest extends TestCase
 {
 	/**
 	 * @return ISizeDriver
