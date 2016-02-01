@@ -1,3 +1,5 @@
+# updated version of https://github.com/nette/http/blob/master/appveyor.yml
+
 build: off
 cache:
   - c:\php -> appveyor.yml

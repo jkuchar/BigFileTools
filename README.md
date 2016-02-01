@@ -1,7 +1,7 @@
 # BigFileTools #
 
-[![Build Status](https://travis-ci.org/jkuchar/BigFileTools.svg?branch=master)](https://travis-ci.org/jkuchar/BigFileTools)
-
+[![Build Status - Linux](https://travis-ci.org/jkuchar/BigFileTools.svg?branch=master)](https://travis-ci.org/jkuchar/BigFileTools)
+[![Build status - Windows](https://ci.appveyor.com/api/projects/status/v5af2son33j443xw/branch/master?svg=true)](https://ci.appveyor.com/project/jkuchar/bigfiletools/branch/master)
 [![Code Climate](https://codeclimate.com/github/jkuchar/BigFileTools/badges/gpa.svg)](https://codeclimate.com/github/jkuchar/BigFileTools)
 
 This project is collection of hacks that are needed to manipulate files over 2GB in PHP. Currently there is support for getting **exact file size**. This project is originally answer for [stackoverflow question](http://stackoverflow.com/questions/5501451/php-x86-how-to-get-filesize-of-2gb-file-without-external-program). 
