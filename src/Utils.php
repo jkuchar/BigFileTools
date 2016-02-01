@@ -40,7 +40,7 @@ class Utils
 	 * @internal
 	 */
 	static function isPlatformWith32bitInteger() {
-		return (string)PHP_INT_MAX === "2147483647"; // (2^32-1)
+		return (string)PHP_INT_MAX === "2147483647"; // (2^31-1)
 	}
 
 	/**
@@ -48,7 +48,7 @@ class Utils
 	 * @internal
 	 */
 	static function isPlatformWith64bitInteger() {
-		return (string)PHP_INT_MAX === "18446744073709551615"; // (2^64-1)
+		return (string)PHP_INT_MAX === "9223372036854775807"; // (2^63-1)
 	}
 
 }
