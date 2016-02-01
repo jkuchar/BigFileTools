@@ -59,7 +59,7 @@ Currently there is support for *size drivers* - drivers for obtaining file size.
 
 Selecting default drivers and their order of drivers is done based on two factors - availability and speed.
 
-| Driver           | Time (s)            | Runtime requirements | Platform 
+| Driver           | Time (s) ↓          | Runtime requirements | Platform 
 | ---------------  | ------------------- | --------------       | ---------
 | CurlDriver       | 0.00045299530029297 | CURL extension       | -
 | NativeSeekDriver | 0.00052094459533691 | -                    | -
