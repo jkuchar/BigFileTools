@@ -6,9 +6,7 @@ use BigFileTools\Driver\ComDriver;
 use BigFileTools\Driver\CurlDriver;
 use BigFileTools\Driver\ExecDriver;
 use BigFileTools\Driver\ISizeDriver;
-use BigFileTools\Driver\NativeReadDriver;
 use BigFileTools\Driver\NativeSeekDriver;
-use Brick\Math\BigInteger;
 
 /**
  * Class for manipulating files bigger than 2GB
@@ -40,7 +38,8 @@ class BigFileTools {
 	 * Constructor - do not call directly
 	 * @param ISizeDriver $sizeDriver
 	 */
-	function __construct(ISizeDriver $sizeDriver = null) {
+	function __construct(ISizeDriver $sizeDriver = null)
+	{
 		if(!$sizeDriver) {
 			$drivers = [
 				new CurlDriver(),
@@ -59,9 +58,8 @@ class BigFileTools {
 	 * @param string $path **full** path to file
 	 * @return File
 	 */
-	public function getFile($path) {
+	public function getFile($path)
+	{
 		return new File($path, $this->sizeDriver);
 	}
 }
-
-class Exception extends \Exception{}
