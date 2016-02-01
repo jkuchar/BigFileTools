@@ -13,6 +13,7 @@ use Brick\Math\BigInteger;
 class ComDriver implements ISizeDriver
 {
 	/**
+	 * Returns file size by using Windows COM interface
 	 * @inheritdoc
 	 * @link http://stackoverflow.com/questions/5501451/php-x86-how-to-get-filesize-of-2gb-file-without-external-program/5502328#5502328
 	 */

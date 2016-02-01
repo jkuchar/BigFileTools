@@ -12,11 +12,12 @@ class Utils
 {
 	/**
 	 * Converts relative path to absolute
-	 * @param $path relative path
-	 * @return string Absolutized path
+	 * @param string $path relative path
+	 * @return string Absolute path
 	 * @throws \BigFileTools\Exception
 	 */
-	static function absolutizePath($path) {
+	static function absolutizePath($path)
+	{
 
 		$path = realpath($path);
 		if(!$path) {

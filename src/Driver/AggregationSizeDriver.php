@@ -10,6 +10,10 @@ namespace BigFileTools\Driver;
 
 use Brick\Math\BigInteger;
 
+/**
+ * Aggregates results from more ISizeDrivers
+ * @package BigFileTools\Driver
+ */
 class AggregationSizeDriver implements ISizeDriver
 {
 	/**
@@ -18,8 +22,18 @@ class AggregationSizeDriver implements ISizeDriver
 	private $drivers = [];
 
 	/**
+	 * @var ISizeDriver
+	 */
+	private $lastUsedDriver = null;
+
+	/**
+	 * @var Exception[]
+	 */
+	private $lastExceptions = [];
+
+	/**
 	 * AggregationSizeDriver constructor.
-	 * @param ISizeDriver[] $drivers
+	 * @param ISizeDriver[] $drivers Ordered array of drivers
 	 */
 	public function __construct(array $drivers)
 	{
@@ -28,8 +42,19 @@ class AggregationSizeDriver implements ISizeDriver
 		}
 	}
 
-	private function addDriver(ISizeDriver $driver) {
+	private function addDriver(ISizeDriver $driver)
+	{
 		$this->drivers[] = $driver;
+	}
+
+	/**
+	 * Returns first non-failing driver from last used of getFileSize()
+	 * @return ISizeDriver
+	 * @internal Should be used for debugging only
+	 */
+	public function getLastUsedDriver()
+	{
+		return $this->lastUsedDriver;
 	}
 
 	/**
@@ -40,15 +65,21 @@ class AggregationSizeDriver implements ISizeDriver
 	 */
 	public function getFileSize($path)
 	{
-		$exceptions = [];
+		$this->lastExceptions = [];
 		foreach($this->drivers as $driver) {
 			try{
-				return $driver->getFileSize($path);
+				$result = $driver->getFileSize($path);
+				$this->lastUsedDriver = $driver;
+				return $result;
 			} catch (Exception $exception) {
-				$exceptions[] = $exception;
+				$this->lastExceptions[] = $exception;
 			}
 		}
 
-		throw new AggregateException("Cannot get file size. All methods failed. Call getPreviousExceptions() to get more information.", 0, $exceptions);
+		throw new AggregateException(
+			"Cannot get file size. All methods failed. Call getPreviousExceptions() to get more information.",
+			null,
+			$this->lastExceptions
+		);
 	}
 }

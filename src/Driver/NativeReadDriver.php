@@ -7,7 +7,7 @@ use Brick\Math\BigInteger;
 class NativeReadDriver implements ISizeDriver
 {
 	/**
-	 * Returns file size by using native fread function
+	 * Returns file size by reading whole files and counting read bites
 	 * @link http://stackoverflow.com/questions/5501451/php-x86-how-to-get-filesize-of-2gb-file-without-external-program/5504829#5504829
 	 * @inheritdoc
 	 */
