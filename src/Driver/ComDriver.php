@@ -12,6 +12,13 @@ use Brick\Math\BigInteger;
 
 class ComDriver implements ISizeDriver
 {
+	public function __construct()
+	{
+		if (!class_exists("COM")) {
+			throw new PrerequisiteException("Make sure that Windows COM exception is loaded.");
+		}
+	}
+
 	/**
 	 * Returns file size by using Windows COM interface
 	 * @inheritdoc
@@ -19,10 +26,6 @@ class ComDriver implements ISizeDriver
 	 */
 	public function getFileSize($path)
 	{
-		if (!class_exists("COM")) {
-			throw new Exception("Make sure that Windows COM exception is loaded.");
-		}
-
 		// Use the Windows COM interface
 		$fsobj = new \COM('Scripting.FileSystemObject');
 		if (dirname($path) == '.')

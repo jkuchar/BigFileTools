@@ -11,7 +11,7 @@ $container = require __DIR__ . "/../../bootstrap.php";
 
 class ExecDriverTest extends BaseDriverTest
 {
-	public function getDriver()
+	protected function getDriver()
 	{
 		return new ExecDriver();
 	}

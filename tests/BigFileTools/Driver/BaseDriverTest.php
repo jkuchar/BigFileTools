@@ -8,10 +8,27 @@
 namespace BigFileTools\Driver;
 
 use Tester\Assert;
+use Tester\Environment;
 use Tester\TestCase;
 
 abstract class BaseDriverTest extends TestCase
 {
+	/**
+	 * @var ISizeDriver
+	 */
+	protected $driver;
+
+	protected function setUp()
+	{
+		parent::setUp();
+
+		try{
+			$this->driver = $this->getDriver();
+		} catch (PrerequisiteException $e) {
+			Environment::skip($e->getMessage());
+		}
+	}
+
 	/**
 	 * @return ISizeDriver
 	 */
@@ -20,7 +37,7 @@ abstract class BaseDriverTest extends TestCase
 	public function testFileSmall_Under2_31bites() {
 		Assert::equal(
 			TESTS_SMALL_FILE_SIZE,
-			(string) $this->getDriver()->getFileSize(TESTS_SMALL_FILE_PATH),
+			(string) $this->driver->getFileSize(TESTS_SMALL_FILE_PATH),
 			"Driver " . get_class($this->getDriver()) . "Failed for file smaller then 2^31 bites"
 		);
 	}
@@ -28,7 +45,7 @@ abstract class BaseDriverTest extends TestCase
 	public function testFileMedium_Between2_31and2_32_bites() {
 		Assert::equal(
 			TESTS_MEDIUM_FILE_SIZE,
-			(string) $this->getDriver()->getFileSize(TESTS_MEDIUM_FILE_PATH),
+			(string) $this->driver->getFileSize(TESTS_MEDIUM_FILE_PATH),
 			"Driver " . get_class($this->getDriver()) . "Failed for file between 2^31 and 2^32 bites"
 		);
 	}
@@ -36,7 +53,7 @@ abstract class BaseDriverTest extends TestCase
 	public function testFileBig_LargerThen2_32bites() {
 		Assert::equal(
 			TESTS_BIG_FILE_SIZE,
-			(string) $this->getDriver()->getFileSize(TESTS_BIG_FILE_PATH),
+			(string) $this->driver->getFileSize(TESTS_BIG_FILE_PATH),
 			"Driver " . get_class($this->getDriver()) . " failed for file with size over 2^32 bites"
 		);
 	}
