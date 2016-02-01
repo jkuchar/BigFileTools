@@ -1,6 +1,7 @@
 <?php
 
-require '../class/BigFileTools.php';
+require '../vendor/autoload.php';
 
-
-echo $f = BigFileTools::fromPath(__FILE__)->getSize()." bytes";
+$bft = new BigFileTools\BigFileTools(/* custom drivers here */);
+$file = $bft->getFile(__FILE__);
+echo $f = $file->getPath() . " is " . $file->getSize() . " bytes big.\n";
