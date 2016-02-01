@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jkuchar1
- * Date: 31.1.2016
- * Time: 12:36
- */
 
 namespace BigFileTools\Driver;
 
