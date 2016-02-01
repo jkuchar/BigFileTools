@@ -26,7 +26,7 @@
 		"brick/math": "~0.5.2"
 	},
 	"suggests": {
-		"ext-curl": "To speed things up. CURL is the fastest method of getting filesize."
+		"ext-curl": "CURL is required by fastest BigFileTools filesize driver. To speed things up please enable CURL."
 	},
 	"require-dev": {
 		"nette/tester": "^1.6"
