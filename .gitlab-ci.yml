@@ -3,6 +3,8 @@ before_script:
 
 nette-tester:
     script:
+      - apt-get update
+      - apt-get install php5-curl -y --force-yes
       - bash tests/setup.sh
       - vendor/bin/tester --colors 1 -s -c tests/php-unix.ini tests
       - bash tests/cleanup.sh
