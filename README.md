@@ -26,9 +26,15 @@ Example file size is 176 bytes
 ````
 Please note, that `getSize()` returns [Brick](https://github.com/brick/math)\\[BigInteger](http://brick.io/math/class-Brick.Math.BigInteger.html). This is due to fact that PHP's internal integer can be too small. 
 
-If you need just approximate value of file size you can convert `BigInteger` into `float`. Please note that by doing this you can *loose precision*.
+To get *approximate* value of file size you can convert `BigInteger` into `float`. Please note that by doing this you will *loose precision*.
 
-**Tip:** If you are using DI container you are probably interested into non-static configuration. There is example prepared for this scenario. 
+**Tip:** If you are using DI container you are probably interested into non-static configuration. There is example prepared for this scenario. (see examples directory)
+
+## Will this really work? ##
+
+To test things out this project uses Travis to evaluate UNIX systems and Appveyor to check compatibility with Windows. Every driver in this project is tested to return exact values for files over 2^32 in size. More about testing in [tests directory](tests). 
+
+
 
 ## Under the hood ##
 
