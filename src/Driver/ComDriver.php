@@ -19,14 +19,15 @@ class ComDriver implements ISizeDriver
 	 */
 	public function getFileSize($path)
 	{
-		if (class_exists("COM")) {
-			// Use the Windows COM interface
-			$fsobj = new \COM('Scripting.FileSystemObject');
-			if (dirname($this->path) == '.')
-				$this->path = ((substr(getcwd(), -1) == DIRECTORY_SEPARATOR) ? getcwd() . basename($this->path) : getcwd() . DIRECTORY_SEPARATOR . basename($this->path));
-			$f = $fsobj->GetFile($this->path);
-			return BigInteger::of($f->Size);
+		if (!class_exists("COM")) {
+			throw new Exception("Make sure that Windows COM exception is loaded.");
 		}
-		throw new Exception("Make sure that Windows COM exception is loaded.");
+
+		// Use the Windows COM interface
+		$fsobj = new \COM('Scripting.FileSystemObject');
+		if (dirname($path) == '.')
+			$this->path = ((substr(getcwd(), -1) == DIRECTORY_SEPARATOR) ? getcwd() . basename($path) : getcwd() . DIRECTORY_SEPARATOR . basename($path));
+		$f = $fsobj->GetFile($path);
+		return BigInteger::of($f->Size);
 	}
 }
