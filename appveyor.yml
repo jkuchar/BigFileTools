@@ -29,6 +29,7 @@ install:
 
 before_test:
   - tests\setup.cmd
+  - vendor\bin\tester -i
 
 test_script:
   - vendor\bin\tester tests -s -c tests\php-windows.ini
