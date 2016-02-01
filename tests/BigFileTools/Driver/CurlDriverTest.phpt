@@ -9,10 +9,6 @@ namespace BigFileTools\Driver;
 
 $container = require __DIR__ . "/../../bootstrap.php";
 
-use BigFileTools\BaseTest;
-use Tester\Assert;
-use Tester\TestCase;
-
 class CurlDriverTest extends BaseDriverTest
 {
 	public function getDriver()

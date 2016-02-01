@@ -9,7 +9,7 @@ namespace BigFileTools;
 use Tester\Environment;
 use Tester\TestCase;
 
-class BaseTest extends TestCase
+class Base32BitTest extends TestCase
 {
 	protected function setUp()
 	{

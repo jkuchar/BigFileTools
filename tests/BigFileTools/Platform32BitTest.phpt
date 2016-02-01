@@ -2,12 +2,15 @@
 /**
  * @testCase
  */
+namespace BigFileTools;
 
 require __DIR__ . "/../bootstrap.php";
 
 use Tester\Assert;
 
-class Platform32BitTest extends \BigFileTools\BaseTest {
+class Platform32Bit32BitTest extends Base32BitTest {
+
+
 
 	public function testFileUnder2_31bites() {
 		Assert::equal(
@@ -39,4 +42,4 @@ class Platform32BitTest extends \BigFileTools\BaseTest {
 
 }
 
-(new Platform32BitTest())->run();
+(new Platform32Bit32BitTest())->run();
