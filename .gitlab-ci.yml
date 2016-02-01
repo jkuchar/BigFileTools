@@ -1,0 +1,13 @@
+before_script:
+  - composer install
+
+nette-tester:
+    script:
+      - bash tests/setup.sh
+      - vendor/bin/tester --colors 1 -s -c tests/php-unix.ini tests
+      - bash tests/cleanup.sh
+    stage: test
+    tags:
+      - grifart/php5.6-base
+    allow_failure: false
+
