@@ -8,11 +8,12 @@ This project is collection of hacks that are needed to manipulate files over 2GB
 
 Example usage:
 ````php
-require "BigFileTools.php";
+require '../vendor/autoload.php';
+use BigFileTools\BigFileTools;
 
-$size = BigFileTools::fromPath(__FILE__)->getSize();
-var_dump($size);
-echo "Example files size is " . $size . " bytes\n";
+// alternatively you can use BigFileTools::createFrom([drivers]) to provide custom drivers
+$file = BigFileTools::createDefault()->getFile(__FILE__);
+echo "Example files size is " . $file->getSize() . " bytes\n";
 ````
 Will produce output:
 ````
@@ -20,6 +21,8 @@ string(3) "176"
 Example files size is 176 bytes
 ````
 Please note, that getSize returns `string`. This is due to fact we cannot be sure that php-integer will be able to store that big value.
+
+**Tip:** If you are using DI container you are probably interested into non-static configuration. There is example prepared for this scenario. 
 
 ## Under the hood ##
 
