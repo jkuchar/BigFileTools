@@ -23,7 +23,7 @@
     },
 	"require": {
 		"php": ">= 5.6.0",
-		"brick/math": "^0.5.2"
+		"brick/math": "~0.5.2"
 	},
 	"suggests": {
 		"ext-curl": "To speed things up. CURL is the fastest method of getting filesize."
