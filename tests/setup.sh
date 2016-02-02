@@ -1,8 +1,8 @@
 #!/bin/bash 
 
 # http://stackoverflow.com/a/8706714/631369
-
-# 4096M = 2^32 bits
+# 2048M = 2^31 bytes
+# 4096M = 2^32 bytes
 
 bash tests/cleanup.sh
 
