@@ -1,12 +1,43 @@
-language: php
-php:
-  - '5.6'
-  - '7.0'
-  - nightly
+
+matrix:
+  include:
+
+    # Linux
+    - os: linux
+      language: php
+      php: '5.6'
+
+    - os: linux
+      language: php
+      php: '7.0'
+
+    - os: linux
+      language: php
+      php: 'nightly'
+
+    # Mac OS X
+    - os: osx
+      env: OSX_PHP_VERSION=php56
+
+    - os: osx
+      env: OSX_PHP_VERSION=php70
+
+install:
+  - if [[ $TRAVIS_OS_NAME == 'osx' ]] ; then brew update ; fi; # travis image is quite old, update to have latest dependecies available
+  - if [[ $TRAVIS_OS_NAME == 'osx' ]] ; then brew tap homebrew/dupes ; fi;
+  - if [[ $TRAVIS_OS_NAME == 'osx' ]] ; then brew tap homebrew/versions ; fi;
+  - if [[ $TRAVIS_OS_NAME == 'osx' ]] ; then brew tap homebrew/homebrew-php ; fi;
+  - if [[ $TRAVIS_OS_NAME == 'osx' ]] ; then brew install ${OSX_PHP_VERSION} ; fi; # install PHP
+  - if [[ $TRAVIS_OS_NAME == 'osx' ]] ; then curl -sS https://getcomposer.org/installer | php ; fi; # install composer
+  - if [[ $TRAVIS_OS_NAME == 'osx' ]] ; then mv composer.phar /usr/local/bin/composer | php ; fi; # install composer globally
+  - if [[ $TRAVIS_OS_NAME == 'osx' ]] ; then export PATH="$(brew --prefix homebrew/php/${OSX_PHP_VERSION})/bin:$PATH" ; fi; # app php to path
+  - if [[ $TRAVIS_OS_NAME == 'osx' ]] ; then brew install coreutils ; fi; # truncate command:
+
 
 before_script:
   - composer install --no-interaction --prefer-dist
-  - bash tests/setup.sh
+  - if [[ $TRAVIS_OS_NAME == 'linux' ]] ; then bash tests/setup-linux.sh ; fi;
+  - if [[ $TRAVIS_OS_NAME == 'osx' ]] ; then bash tests/setup-osx.sh ; fi;
   - vendor/bin/tester -i
 
 script:
