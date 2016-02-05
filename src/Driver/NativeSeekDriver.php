@@ -29,9 +29,6 @@ class NativeSeekDriver implements ISizeDriver
 		flock($fp, LOCK_UN);
 		fclose($fp);
 
-		// TODO: There is *hope* that ftell() or fseek() fails when file is over 4GB
-		// TODO: This really needs tests, any ideas how to test this in CI? (please let me know)
-
 		if($flockResult === false) {
 			throw new Exception("Couldn't get file lock. Operation abandoned.");
 		}
