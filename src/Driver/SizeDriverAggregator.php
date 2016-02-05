@@ -5,10 +5,12 @@ namespace BigFileTools\Driver;
 use Brick\Math\BigInteger;
 
 /**
- * Aggregates results from more ISizeDrivers
+ * Aggregates results from more ISizeDrivers. First successful call to driver will return value.
+ * Exceptions thrown during unsuccessful calls are saved into class state and are available over getter.
+ *
  * @package BigFileTools\Driver
  */
-class AggregationSizeDriver implements ISizeDriver
+class SizeDriverAggregator implements ISizeDriver
 {
 	/**
 	 * @var ISizeDriver[]
@@ -26,8 +28,7 @@ class AggregationSizeDriver implements ISizeDriver
 	private $lastExceptions = [];
 
 	/**
-	 * AggregationSizeDriver constructor.
-	 * @param ISizeDriver[] $drivers Ordered array of drivers
+	 * @param ISizeDriver[] $drivers Ordered array of driver instances
 	 */
 	public function __construct(array $drivers)
 	{

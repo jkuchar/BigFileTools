@@ -1,13 +1,13 @@
 <?php
 
 namespace BigFileTools;
-use BigFileTools\Driver\AggregationSizeDriver;
+use BigFileTools\Driver\SizeDriverAggregator;
 use BigFileTools\Driver\ComDriver;
 use BigFileTools\Driver\CurlDriver;
 use BigFileTools\Driver\ExecDriver;
 use BigFileTools\Driver\ISizeDriver;
 use BigFileTools\Driver\NativeSeekDriver;
-use BigFileTools\Driver\BestEffortAggregateSizeDriver;
+use BigFileTools\Driver\SizeDriverFactory;
 
 /**
  * @author Honza Kuchař
@@ -28,7 +28,7 @@ class BigFileTools {
 	}
 
 	/**
-	 * @var AggregationSizeDriver
+	 * @var SizeDriverAggregator
 	 */
 	private $sizeDriver;
 
@@ -40,7 +40,9 @@ class BigFileTools {
 	 */
 	public static function createFrom(array $drivers) {
 		return new static(
-			new BestEffortAggregateSizeDriver($drivers)
+			new SizeDriverAggregator(
+				(new SizeDriverFactory($drivers))->getInitializedDrivers()
+			)
 		);
 	}
 
