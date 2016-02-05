@@ -9,7 +9,7 @@ class ComDriver implements ISizeDriver
 	public function __construct()
 	{
 		if (!class_exists("COM")) {
-			throw new PrerequisiteException("Make sure that Windows COM exception is loaded.");
+			throw new PrerequisiteException("CurlDriver requires COM extension to be loaded in PHP");
 		}
 	}
 

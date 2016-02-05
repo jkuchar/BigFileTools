@@ -9,7 +9,7 @@ class CurlDriver implements ISizeDriver
 	{
 		// curl solution - cross platform and really cool :)
 		if (!function_exists("curl_init")) {
-			throw new PrerequisiteException("Curl extension is not loaded.");
+			throw new PrerequisiteException("CurlDriver requires CURL extension to be loaded in PHP");
 		}
 	}
 
