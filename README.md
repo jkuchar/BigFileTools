@@ -10,33 +10,26 @@
 [![Monthly Downloads](https://poser.pugx.org/jkuchar/bigfiletools/d/monthly)](https://packagist.org/packages/jkuchar/bigfiletools)
 
 
-This project is collection of hacks that are needed to manipulate files over 2GB in PHP. Currently there is support for getting **exact file size**. This project is originally answer for [stackoverflow question](http://stackoverflow.com/questions/5501451/php-x86-how-to-get-filesize-of-2gb-file-without-external-program). 
+This project is collection of hacks that are needed to manipulate files over 2GB in PHP (even on 32-bit systems). Currently there is support for getting **exact file size**. This project started as answer to [stackoverflow question](http://stackoverflow.com/questions/5501451/php-x86-how-to-get-filesize-of-2gb-file-without-external-program). 
 
-Example usage:
+Simplest usage:
 ````php
-require '../vendor/autoload.php';
-use BigFileTools\BigFileTools;
-
-// alternatively you can use BigFileTools::createFrom([drivers]) to provide custom drivers
-$file = BigFileTools::createDefault()->getFile(__FILE__);
-echo "Example file size is " . $file->getSize() . " bytes\n";
+$file = BigFileTools\BigFileTools::createDefault()->getFile(__FILE__);
+echo "This file has " . $file->getSize() . " bytes\n";
 ````
 Will produce output:
 ````
-string(3) "176"
-Example file size is 176 bytes
+This file has 176 bytes
 ````
-Please note, that `getSize()` returns [Brick](https://github.com/brick/math)\\[BigInteger](http://brick.io/math/class-Brick.Math.BigInteger.html). This is due to fact that PHP's internal integer can be too small. 
+Please note, that `getSize()` returns [Brick](https://github.com/brick/math)\\[BigInteger](http://brick.io/math/class-Brick.Math.BigInteger.html). This is due to fact that PHP's internal integer can be too small for huge files.
 
 To get *approximate* value of file size you can convert `BigInteger` into `float`. Please note that by doing this you will *loose precision*.
 
-**Tip:** If you are using DI container you are probably interested into non-static configuration. There is example prepared for this scenario. (see examples directory)
+**Tip:** You can configure BigFileTools in any way you want. (no static dependencies included) There is example in example directory prepared for this scenario.
 
 ## Will this really work? ##
 
-To test things out this project uses Travis to evaluate UNIX systems and Appveyor to check compatibility with Windows. Every driver in this project is tested to return exact values for files over 2^32 in size. More about testing in [tests directory](tests). 
-
-
+This project is automatically tested on Linux, Mac OS X and Windows. More about testing in [tests directory](tests). 
 
 ## Under the hood ##
 
@@ -66,7 +59,7 @@ Selecting default drivers and their order of drivers is done based on two factor
 | CurlDriver       | 0.00045299530029297 | CURL extension       | -
 | NativeSeekDriver | 0.00052094459533691 | -                    | -
 | ComDriver        | 0.0031449794769287  | COM+.NET extension   | Windows only
-| ExecDriver       | 0.042937040328979   | exec() enabled       | Windows, POSIX
+| ExecDriver       | 0.042937040328979   | exec() enabled       | Windows, Linux, OS X
 | NativeRead       | 2.7670161724091     | -                    | -
 
 In default configuration size drivers are ordered by speed and unavailable ones are skipped. This means that in default configuration you do not need to worry about compatibility.
@@ -75,4 +68,4 @@ Requirements
 ------------
 Please follow [Composer](https://getcomposer.org/) requirements.
 
-To speed things up (e.g. in production) **I recommend installing CURL extension.**
+To speed things up (e.g. in production) **I recommend installing CURL extension** which enables you to use the fastest driver.
