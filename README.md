@@ -9,6 +9,7 @@
 [![Build status - Windows](https://ci.appveyor.com/api/projects/status/v5af2son33j443xw/branch/master?svg=true)](https://ci.appveyor.com/project/jkuchar/bigfiletools/branch/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jkuchar/BigFileTools/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jkuchar/BigFileTools/?branch=master)
 [![Code Climate](https://codeclimate.com/github/jkuchar/BigFileTools/badges/gpa.svg)](https://codeclimate.com/github/jkuchar/BigFileTools)
+[API Docs](https://codedoc.pub/jkuchar/BigFileTools)
 
 
 
