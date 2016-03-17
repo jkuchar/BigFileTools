@@ -382,7 +382,7 @@ class BigFileTools {
 			}
 
 			// If the return is not blank, not zero, and is number
-			if ($size AND ctype_digit($size)) {
+			if (ctype_digit($size)) {
 				return (string) $size;
 			}
 		}
