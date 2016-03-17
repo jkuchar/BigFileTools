@@ -4,6 +4,9 @@ require __DIR__ . "/../vendor/autoload.php";
 
 Tester\Environment::setup();
 
+define("TESTS_EMPTY_FILE_PATH", __DIR__ . "/temp/emptyfile.tmp"); // 0B
+define("TESTS_EMPTY_FILE_SIZE", "0");
+
 define("TESTS_SMALL_FILE_PATH", __DIR__ . "/temp/smallfile.tmp"); // 1M (less then 2^31)
 define("TESTS_SMALL_FILE_SIZE", "1048576");
 

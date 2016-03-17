@@ -2,6 +2,7 @@
 
 namespace BigFileTools\Driver;
 use Brick\Math\BigInteger;
+use Brick\Math\Exception\ArithmeticException;
 
 class ExecDriver implements ISizeDriver
 {
@@ -41,36 +42,50 @@ class ExecDriver implements ISizeDriver
 		}
 	}
 
+	/**
+	 * Convert string into integer
+	 * Must be precise number, otherwise you will see and exception.
+	 *
+	 * @param $valueAsString
+	 * @return BigInteger
+	 * @throws Exception
+	 */
+	private function convertToInteger($valueAsString) {
+		if(!is_string($valueAsString)) {
+			throw new Exception("Cannot convert to integer. Expected string, but got " . gettype($valueAsString). ".");
+		}
+		$trimmedInput = trim($valueAsString);
+
+		try {
+			return BigInteger::of($trimmedInput);
+
+		} catch (ArithmeticException $e) {
+			throw new Exception("Returned value cannot be converted to an integer.",0, $e);
+		}
+
+	}
+
 	private function getFileSizeWindows($path)
 	{
 		$escapedPath = escapeshellarg($path);
-		$size = trim(exec("for %F in ($escapedPath) do @echo %~zF"));
-		if ($size AND ctype_digit($size)) {
-			return BigInteger::of($size);
-		} else {
-			throw new Exception("Exec returned invalid value");
-		}
+		return $this->convertToInteger(
+			exec("for %F in ($escapedPath) do @echo %~zF")
+		);
 	}
 
 	private function getFileSizeLinux($path)
 	{
 		$escapedPath = escapeshellarg($path);
-		$size = trim(exec("stat -Lc%s $escapedPath"));
-		if ($size AND ctype_digit($size)) {
-			return BigInteger::of($size);
-		} else {
-			throw new Exception("Exec returned invalid value");
-		}
+		return $this->convertToInteger(
+			exec("stat -Lc%s $escapedPath")
+		);
 	}
 
 	private function getFileSizeMac($path)
 	{
 		$escapedPath = escapeshellarg($path);
-		$size = trim(exec("stat -f%z $escapedPath"));
-		if ($size AND ctype_digit($size)) {
-			return BigInteger::of($size);
-		} else {
-			throw new Exception("Exec returned invalid value");
-		}
+		return $this->convertToInteger(
+			exec("stat -f%z $escapedPath")
+		);
 	}
 }

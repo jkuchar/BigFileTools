@@ -34,6 +34,14 @@ abstract class BaseDriverTest extends TestCase
 	 */
 	abstract protected function getDriver();
 
+	public function testFileEmpty() {
+		Assert::equal(
+			TESTS_EMPTY_FILE_SIZE,
+			(string) $this->driver->getFileSize(TESTS_EMPTY_FILE_PATH),
+			"Driver " . get_class($this->getDriver()) . "Failed for file empty file."
+		);
+	}
+
 	public function testFileSmall_Under2_31bites() {
 		Assert::equal(
 			TESTS_SMALL_FILE_SIZE,
