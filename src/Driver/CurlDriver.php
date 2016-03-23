@@ -20,7 +20,7 @@ class CurlDriver implements ISizeDriver
 	 */
 	public function getFileSize($path)
 	{
-		$ch = curl_init("file://" . urlencode($path));
+		$ch = curl_init("file://" . rawurlencode($path));
 		curl_setopt($ch, CURLOPT_NOBODY, true);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HEADER, true);
