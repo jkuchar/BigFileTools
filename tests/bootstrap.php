@@ -5,6 +5,8 @@ require __DIR__ . "/../vendor/autoload.php";
 Tester\Environment::setup();
 
 define("TESTS_EMPTY_FILE_PATH", __DIR__ . "/temp/emptyfile.tmp"); // 0B
+define("TESTS_EMPTY_FILE_WITH_SPACE_PATH", __DIR__ . "/temp/empty - file.tmp"); // 0B  with with space in name
+define("TESTS_EMPTY_FILE_WITH_UTF8_PATH", __DIR__ . "/temp/emptyfileěšů指事字.tmp"); // 0B with utf-8
 define("TESTS_EMPTY_FILE_SIZE", "0");
 
 define("TESTS_SMALL_FILE_PATH", __DIR__ . "/temp/smallfile.tmp"); // 1M (less then 2^31)
