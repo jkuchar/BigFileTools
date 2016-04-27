@@ -21,9 +21,10 @@ class ComDriver implements ISizeDriver
 	public function getFileSize($path)
 	{
 		// Use the Windows COM interface
-		$fsobj = new \COM('Scripting.FileSystemObject');
-		if (dirname($path) == '.')
-			$this->path = ((substr(getcwd(), -1) == DIRECTORY_SEPARATOR) ? getcwd() . basename($path) : getcwd() . DIRECTORY_SEPARATOR . basename($path));
+		$fsobj = new \COM('Scripting.FileSystemObject', null, CP_UTF8);
+		if (dirname($path) == '.') {
+			$path = ((substr(getcwd(), -1) == DIRECTORY_SEPARATOR) ? getcwd() . basename($path) : getcwd() . DIRECTORY_SEPARATOR . basename($path));
+		}
 		$f = $fsobj->GetFile($path);
 		return BigInteger::of($f->Size);
 	}
