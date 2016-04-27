@@ -4,6 +4,10 @@ require __DIR__ . "/../vendor/autoload.php";
 
 Tester\Environment::setup();
 
+function isWindows() {
+	return strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+}
+
 define("TESTS_EMPTY_FILE_PATH", __DIR__ . "/temp/emptyfile.tmp"); // 0B
 define("TESTS_EMPTY_FILE_WITH_SPACE_PATH", __DIR__ . "/temp/empty - file.tmp"); // 0B  with with space in name
 define("TESTS_EMPTY_FILE_WITH_UTF8_PATH", __DIR__ . "/temp/emptyfileěšů指事字.tmp"); // 0B with utf-8
