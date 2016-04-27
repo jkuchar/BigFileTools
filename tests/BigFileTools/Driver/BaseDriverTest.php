@@ -50,6 +50,14 @@ abstract class BaseDriverTest extends TestCase
 		);
 	}
 
+	public function testFileEmptyWithUtf8InName() {
+		Assert::equal(
+			TESTS_EMPTY_FILE_SIZE,
+			(string) $this->driver->getFileSize(TESTS_EMPTY_FILE_WITH_UTF8_PATH),
+			"Driver " . get_class($this->getDriver()) . "Failed for file empty file with UTF-8 characters in name."
+		);
+	}
+
 	public function testFileSmall_Under2_31bites() {
 		Assert::equal(
 			TESTS_SMALL_FILE_SIZE,

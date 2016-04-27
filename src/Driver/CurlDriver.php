@@ -29,6 +29,6 @@ class CurlDriver implements ISizeDriver
 		if ($data !== false && preg_match('/Content-Length: (\d+)/', $data, $matches)) {
 			return BigInteger::of($matches[1]);
 		}
-		throw new Exception("Curl haven't returned file size.");
+		throw new Exception("Curl haven't returned file size. File probably does not exist.");
 	}
 }

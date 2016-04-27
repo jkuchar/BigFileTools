@@ -60,7 +60,7 @@ class ExecDriver implements ISizeDriver
 			return BigInteger::of($trimmedInput);
 
 		} catch (ArithmeticException $e) {
-			throw new Exception("Returned value cannot be converted to an integer.",0, $e);
+			throw new Exception("Returned value cannot be converted to an integer.", 0, $e);
 		}
 
 	}

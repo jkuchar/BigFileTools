@@ -7,6 +7,8 @@
 
 namespace BigFileTools\Driver;
 
+use Tester\Environment;
+
 $container = require __DIR__ . "/../../bootstrap.php";
 
 class CurlDriverTest extends BaseDriverTest
@@ -14,6 +16,14 @@ class CurlDriverTest extends BaseDriverTest
 	protected function getDriver()
 	{
 		return new CurlDriver();
+	}
+
+	public function testFileEmptyWithUtf8InName()
+	{
+		if (isWindows()) {
+			Environment::skip("CURL does not support UTF-8 on Windows.");
+		}
+		parent::testFileEmptyWithUtf8InName();
 	}
 }
 
