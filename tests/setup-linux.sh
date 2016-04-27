@@ -8,6 +8,7 @@ bash tests/cleanup.sh
 
 touch tests/temp/emptyfile.tmp
 touch "tests/temp/empty - file.tmp"
+touch "tests/temp/emptyfileěšů指事字.tmp"
 truncate -s 1M tests/temp/smallfile.tmp
 truncate -s 2050M tests/temp/mediumfile.tmp
 truncate -s 4100M tests/temp/bigfile.tmp
