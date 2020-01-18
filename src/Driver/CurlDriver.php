@@ -25,9 +25,20 @@ class CurlDriver implements ISizeDriver
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HEADER, true);
 		$data = curl_exec($ch);
+		$size = null;
+		if ($data !== false) {
+			if (empty($data)) {
+				$info = curl_getinfo($ch);
+				if (isset($info['download_content_length'])) {
+					$size = $info['download_content_length'];
+				}
+			} elseif (preg_match('/Content-Length: (\d+)/', $data, $matches)) {
+				$size = $matches[1];
+			}
+		}
 		curl_close($ch);
-		if ($data !== false && preg_match('/Content-Length: (\d+)/', $data, $matches)) {
-			return BigInteger::of($matches[1]);
+		if ($size !== null) {
+			return BigInteger::of($size);
 		}
 		throw new Exception("Curl haven't returned file size.");
 	}
